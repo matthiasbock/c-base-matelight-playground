@@ -3,6 +3,9 @@
 from random import *
 from subprocess import Popen, PIPE, run
 from shlex import split
+from time import sleep
+import socket
+
 
 LENGTH=640
 PADDING=4
@@ -33,17 +36,8 @@ seed()
 data = generateRandomSequence()
 print("Sequence length is {:d}".format(len(data)))
 
-f=open("datei","wb")
-f.write(data)
-f.close()
-
-cmd = split("netcat -u {:s} {:d}".format(HOST, PORT))
-p = Popen(cmd, stdin=PIPE)
-p.communicate(input = data)
-p.terminate()
-#p.wait()
-
-#run(cmd, stdout=PIPE, input=generateRandomSequence(), encoding="utf-8")
-
-#print(generateRandomSequence())
-
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+while True:
+    msg = generateRandomSequence()
+    sock.sendto(msg, (HOST, PORT))
+    sleep(0.1)
