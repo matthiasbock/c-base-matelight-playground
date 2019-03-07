@@ -36,8 +36,15 @@ seed()
 data = generateRandomSequence()
 print("Sequence length is {:d}".format(len(data)))
 
+leHotMatthias = open("bild.raw", "rb").read()
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 while True:
-    msg = generateRandomSequence()
+    for i in range(10):
+        msg = generateRandomSequence()
+        sock.sendto(msg, (HOST, PORT))
+        sleep(0.1)
+
+    msg = leHotMatthias
     sock.sendto(msg, (HOST, PORT))
-    sleep(0.1)
+    sleep(3)
