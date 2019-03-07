@@ -38,21 +38,17 @@ print("Sequence length is {:d}".format(len(data)))
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 while True:
-    for i in range(10):
-        msg = generateRandomSequence()
-        sock.sendto(msg, (HOST, PORT))
-        print("random...")
-        sleep(0.1)
-
     print("video...")
-    for i in range(5):
-        f = open("{:03d}.rgb".format(i+1), "rb")
+    for i in range(218):
+        print("frame {:d}...".format(i))
+        f = open("{:03d}.jpg.rgb".format(i+1), "rb")
         stretched = b""
+        pixel = 24
+        a = int((40-pixel)/2)
+        b = 40-pixel-a
         for row in range(16):
-            stretched += bytes(11*3) + f.read(17*3) + bytes(12*3)
+            stretched += bytes(a*3) + f.read(pixel*3) + bytes(b*3)
         f.close() 
         msg = stretched
         sock.sendto(msg, (HOST, PORT))
-        sleep(0.2)
-
-    sleep(3)
+        sleep(0.1)
