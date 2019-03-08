@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 from random import *
 from subprocess import Popen, PIPE, run
 from shlex import split
@@ -39,16 +40,21 @@ print("Sequence length is {:d}".format(len(data)))
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 while True:
     print("video...")
-    for i in range(218):
-        print("frame {:d}...".format(i))
-        f = open("{:03d}.jpg.rgb".format(i+1), "rb")
-        stretched = b""
-        pixel = 24
-        a = int((40-pixel)/2)
-        b = 40-pixel-a
-        for row in range(16):
-            stretched += bytes(a*3) + f.read(pixel*3) + bytes(b*3)
-        f.close() 
-        msg = stretched
-        sock.sendto(msg, (HOST, PORT))
-        sleep(0.1)
+    for i in range(5000):
+        filename = "{:03d}.jpg.rgb".format(i+1)
+        if os.path.exists(filename):
+            print("frame {:d}...".format(i))
+            f = open(filename, "rb")
+            stretched = b""
+            pixel = 21
+            a = int((40-pixel)/2)
+            b = 40-pixel-a
+            for row in range(16):
+                stretched += bytes(a*3) + f.read(pixel*3) + bytes(b*3)
+#                stretched += f.read(40*3)
+#                f.read(23*3)
+            f.close() 
+            msg = stretched
+            sock.sendto(msg, (HOST, PORT))
+            sleep(0.05)
+    #sleep(2)
